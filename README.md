@@ -42,6 +42,9 @@ echo "module.exports = {
 This will `HMSET` the piped JS or JSON file into a Redis hashes key `myconfig` on the specified `redisHost` e.g. `localhost.` Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
 
 ```shell
-$ redis-cli hget myconfig url
-"https://news.ycombinator.com"
+$ redis-cli hgetall myconfig
+1) "url"
+2) "https://news.ycombinator.com"
+3) "selector"
+4) "a.storylink"
 ```
