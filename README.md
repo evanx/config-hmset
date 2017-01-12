@@ -32,9 +32,9 @@ echo '{"url": "https://news.ycombinator.com"}' |
 - the image of the application container is `evanxsummers/config-hmset` (DockerHub)
 - JSON content is piped as standard input into `docker run -i` of this app image
 - the `redisHost` and hashes `key` are specified using `-e` (environment variables for the app)
-- the app will set a Redis `hashes` key from the JSON input content
+- the app will `HMSET` a Redis `hashes` key from the JSON input content
 
-This will `HMSET` the piped JS or JSON file into a Redis hashes key `myconfig` on the specified `redisHost` e.g. `localhost.` Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
+Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
 
 ```shell
 $ redis-cli hgetall myconfig
