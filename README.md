@@ -63,3 +63,14 @@ CMD ["node", "--harmony", "src/index.js"]
 ```
 
 Or use `evanxsummers/config-hmset` i.e. prebuilt on DockerHub.
+
+You can check the version using `npm` as follows
+```shell
+$ docker run evanxsummers/config-hmset npm version | head -1
+{ 'config-hmset': '0.2.0',
+```
+or
+```shell
+$ docker run evanxsummers/config-hmset cat package.json | grep version 
+  "version": "0.2.0",
+```
