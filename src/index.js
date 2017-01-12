@@ -36,13 +36,13 @@ async function main() {
 }
 
 function parse(content) {
-    content = content.replace(/[ \t]\n/g, '\n').trim();    
+    content = content.replace(/[ \t]\n/g, '\n').trim();
     if (/^\{/.test(content)) {
         return JSON.parse(content);
     } else if (/^module.exports = \{/.test(content)) {
         return require('@f/require-content')(content, 'stdin');
     } else {
-        throw new Error('Standard input must be JSON or module.exports');
+        throw new Error('Standard input must be JSON or JS with module.exports');
     }
 }
 
