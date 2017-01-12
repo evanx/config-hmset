@@ -3,6 +3,14 @@
 
 Containerized util to set Redis hashes from JS/JSON file
 
+
+## Docker image
+
+The Docker image can be built as follows:
+```
+docker build -t config-hmset https://github.com/evanx/config-hmset.git
+```
+
 ## Test
 
 ```
