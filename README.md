@@ -41,8 +41,6 @@ We can inspect the hashes `key` to verify that its fields were set as expected:
 $ redis-cli hgetall myconfig
 1) "url"
 2) "https://news.ycombinator.com"
-3) "selector"
-4) "a.storylink"
 ```
 
 ## Docker image
@@ -71,6 +69,6 @@ $ docker run evanxsummers/config-hmset npm version | head -1
 ```
 or
 ```shell
-$ docker run evanxsummers/config-hmset cat package.json | grep version 
+$ docker run evanxsummers/config-hmset cat package.json | grep version
   "version": "0.2.0",
 ```
