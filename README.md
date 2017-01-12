@@ -18,13 +18,18 @@ await multiExecAsync(redis, multi => {
             multi.hset(config.key, key, JSON.stringify(value));
         } else {
             multi.hset(config.key, key, value);
+        }
+    });
+});
 ```
 
+It's designed to be containerized:
 ```shell
 echo '{"url": "https://news.ycombinator.com"}' |
   docker run -i --network=host -e redisHost=127.0.0.1 \
     -e key=myconfig evanxsummers/config-hmset
 ```
+where the content is piped into the standard input of `docker run -i`
 
 This will `HMSET` the piped JS or JSON file into a Redis hashes key `myconfig` on the specified `redisHost` e.g. `localhost.` Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
 
@@ -41,4 +46,14 @@ $ redis-cli hgetall myconfig
 The Docker image can be built as follows:
 ```
 docker build -t config-hmset https://github.com/evanx/config-hmset.git
+```
+
+From the `Dockerfile`
+```
+FROM mhart/alpine-node
+ADD package.json .
+RUN npm install
+ADD components components
+ADD src src
+CMD ["node", "--harmony", "src/index.js"]
 ```
