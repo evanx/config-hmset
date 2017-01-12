@@ -1,6 +1,6 @@
 {
   "name": "config-hmset",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A service to select element from a document loaded by PhantomJS.",
   "main": "index.js",
   "scripts": {
