@@ -36,6 +36,7 @@ echo '{"url": "https://news.ycombinator.com"}' |
 
 Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
 
+We can inspect the hashes `key` to verify that its fields were set as expected:
 ```shell
 $ redis-cli hgetall myconfig
 1) "url"
