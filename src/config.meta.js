@@ -7,6 +7,15 @@ module.exports = {
         description: 'the Redis host',
         example: 'localhost'
     },
+    clean: {
+        default: false,
+        description: 'to remove old fields set previously',
+    },
+    expire: {
+        required: false,
+        type: 'integer',
+        description: 'seconds',
+    },
     level: {
         default: 'info',
         description: 'logging level',

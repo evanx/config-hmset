@@ -15,6 +15,9 @@ async function main() {
         const content = await getStdin();
         const object = parse(content);
         await multiExecAsync(redis, multi => {
+            if (config.clean) {
+                multi.del(config.key);
+            }
             Object.keys(object).forEach(key => {
                 const value = object[key];
                 if (typeof value === 'object') {
@@ -23,6 +26,9 @@ async function main() {
                     multi.hset(config.key, key, value);
                 }
             });
+            if (config.expire > 0) {
+                multi.expire(config.key, config.expire);                
+            }
         });
         const [hgetall] = await multiExecAsync(redis, multi => {
             multi.hgetall(config.key);
