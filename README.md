@@ -61,3 +61,5 @@ ADD components components
 ADD src src
 CMD ["node", "--harmony", "src/index.js"]
 ```
+
+Or use `evanxsummers/config-hmset` i.e. prebuilt on DockerHub.
