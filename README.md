@@ -18,17 +18,12 @@ await multiExecAsync(redis, multi => {
             multi.hset(config.key, key, JSON.stringify(value));
         } else {
             multi.hset(config.key, key, value);
-        }
-    });
-});
 ```
 
 ```shell
-echo "module.exports = {
-    url: 'https://news.ycombinator.com',
-    selector: 'a.storylink'
-}" | docker run -i --network=host -e redisHost=127.0.0.1 \
-       -e key=myconfig evanxsummers/config-hmset
+echo '{"url": "https://news.ycombinator.com"}' |
+  docker run -i --network=host -e redisHost=127.0.0.1 \
+    -e key=myconfig evanxsummers/config-hmset
 ```
 
 This will `HMSET` the piped JS or JSON file into a Redis hashes key `myconfig` on the specified `redisHost` e.g. `localhost.` Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
