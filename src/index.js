@@ -14,7 +14,7 @@ async function main() {
     try {
         state.content = await getStdin();
         state.content = state.content.replace(/[ \t]\n/g, '\n').trim();
-        const object = getConfigObject(state.content);
+        const object = parse(state.content);
         await multiExecAsync(redis, multi => {
             Object.keys(object).forEach(key => {
                 const value = object[key];
@@ -36,7 +36,7 @@ async function main() {
     }
 }
 
-function getConfigObject(content) {
+function parse(content) {
     if (/^\{/.test(content)) {
         return JSON.parse(content);
     } else if (/^module.exports = \{/.test(content)) {

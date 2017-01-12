@@ -3,7 +3,25 @@
 
 Containerized util to set Redis hashes from JS/JSON file
 
+## Implementation
+
 Note that for properties that are not strings or numbers, we apply `JSON.stringify`
+
+The implementation is essentially as follows:
+```javascript
+const content = await getStdin();
+const object = JSON.parse(content);
+await multiExecAsync(redis, multi => {
+    Object.keys(object).forEach(key => {
+        const value = object[key];
+        if (typeof value === 'object') {
+            multi.hset(config.key, key, JSON.stringify(value));
+        } else {
+            multi.hset(config.key, key, value);
+        }
+    });
+});
+```
 
 ## Docker image
 
