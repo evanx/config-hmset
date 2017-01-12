@@ -12,29 +12,35 @@ main();
 async function main() {
     const state = {};
     try {
-        state.configContent = await getStdin();
-        state.configContent = state.configContent.replace(/[ \t]\n/g, '\n').trim();
-        const configObject = getConfigObject(state.configContent);
+        state.content = await getStdin();
+        state.content = state.content.replace(/[ \t]\n/g, '\n').trim();
+        const object = getConfigObject(state.content);
         await multiExecAsync(redis, multi => {
-            multi.hmset(config.key, configObject);
+            Object.keys(object).forEach(key => {
+                const value = object[key];
+                if (typeof value === 'object') {
+                    multi.hset(config.key, key, JSON.stringify(value));
+                } else {
+                    multi.hset(config.key, key, value);
+                }
+            });
         });
         const [hgetall] = await multiExecAsync(redis, multi => {
             multi.hgetall(config.key);
         });
         console.log(config.key, hgetall);
     } catch (err) {
-        console.log({state});
         console.error(err);
     } finally {
         redis.quit();
     }
 }
 
-function getConfigObject(configContent) {
-    if (/^\{/.test(configContent)) {
-        return JSON.parse(configContent);
-    } else if (/^module.exports = \{/.test(configContent)) {
-        return require('@f/require-content')(configContent, 'stdin');
+function getConfigObject(content) {
+    if (/^\{/.test(content)) {
+        return JSON.parse(content);
+    } else if (/^module.exports = \{/.test(content)) {
+        return require('@f/require-content')(content, 'stdin');
     } else {
         throw new Error('Standard input must be JSON or module.exports');
     }
