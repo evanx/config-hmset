@@ -29,7 +29,10 @@ echo '{"url": "https://news.ycombinator.com"}' |
   docker run -i --network=host -e redisHost=127.0.0.1 \
     -e key=myconfig evanxsummers/config-hmset
 ```
-where the content is piped into the standard input of `docker run -i`
+- the image of the application container is `evanxsummers/config-hmset` (DockerHub)
+- JSON content is piped into the standard input of `docker run -i`
+- `redisHost` and `key` are specified using `-e` (environment variables for the app)
+- the app will set a Redis `hashes` key from the JSON input content
 
 This will `HMSET` the piped JS or JSON file into a Redis hashes key `myconfig` on the specified `redisHost` e.g. `localhost.` Note that since this is a container, usually `redisHost` it will not be `localhost` unless bridged e.g. via `--network=host.`
 
