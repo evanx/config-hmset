@@ -16,9 +16,7 @@ module.exports = metas => Object.keys(metas).reduce((config, key) => {
     } else {
         const meta = metas[key];
         if (meta.required !== false) {
-            throw new Error(
-                `Missing required config '${key}' for the ${meta.description} e.g. '${meta.example}'`
-            );
+            throw `Missing required config '${key}' for the ${meta.description} e.g. '${meta.example}'`;
         }
     }
     return config;
