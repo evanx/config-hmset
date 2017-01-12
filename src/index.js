@@ -7,9 +7,26 @@ const config = require('../components/config')(require('./config.meta'));
 const redis = require('../components/redisAsync')(config);
 const getStdin = require('get-stdin');
 
-async function debug() {
-    if (process.env.NODE_ENV !== 'production' || config.debug) {
-        console.log(...arguments);
+main();
+
+async function main() {
+    const state = {};
+    try {
+        state.configContent = await getStdin();
+        state.configContent = state.configContent.replace(/[ \t]\n/g, '\n').trim();
+        const configObject = getConfigObject(state.configContent);
+        await multiExecAsync(redis, multi => {
+            multi.hmset(config.key, configObject);
+        });
+        const [hgetall] = await multiExecAsync(redis, multi => {
+            multi.hgetall(config.key);
+        });
+        console.log(config.key, hgetall);
+    } catch (err) {
+        console.log({state});
+        console.error(err);
+    } finally {
+        redis.quit();
     }
 }
 
@@ -21,25 +38,10 @@ function getConfigObject(configContent) {
     } else {
         throw new Error('Standard input must be JSON or module.exports');
     }
-
 }
 
-async function main() {
-    const state = {};
-    try {
-        state.configContent = await getStdin();
-        state.configContent = state.configContent.replace(/[ \t]\n/g, '\n').trim();
-        const configObject = getConfigObject(state.configContent);
-        console.log({configObject});
-        await multiExecAsync(redis, multi => {
-            multi.hmset(config.key, configObject);
-        });
-    } catch (err) {
-        console.log({state});
-        console.error(err);
-    } finally {
-        redis.quit();
+function debug() {
+    if (process.env.NODE_ENV !== 'production' || config.debug) {
+        console.log(...arguments);
     }
 }
-
-main();
