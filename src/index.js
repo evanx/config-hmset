@@ -19,15 +19,10 @@ async function main() {
                 multi.del(config.key);
             }
             Object.keys(object).forEach(key => {
-                const value = object[key];
-                if (typeof value === 'object') {
-                    multi.hset(config.key, key, JSON.stringify(value));
-                } else {
-                    multi.hset(config.key, key, value);
-                }
+                multi.hset(config.key, key, stringify(object[key]));
             });
             if (config.expire > 0) {
-                multi.expire(config.key, config.expire);                
+                multi.expire(config.key, config.expire);
             }
         });
         const [hgetall] = await multiExecAsync(redis, multi => {
@@ -49,6 +44,14 @@ function parse(content) {
         return require('@f/require-content')(content, 'stdin');
     } else {
         throw new Error('Standard input must be JSON or JS with module.exports');
+    }
+}
+
+function stringify(value) {
+    if (typeof value === 'object') {
+        return JSON.stringify(value);
+    } else {
+        return value;
     }
 }
 
