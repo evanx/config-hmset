@@ -17,11 +17,12 @@
     "@f/require-content": "^1.0.2",
     "bluebird": "^3.4.6",
     "get-stdin": "^5.0.1",
+    "lodash": "^4.17.14",
     "redis": "^2.6.3",
     "winston": "^2.3.0"
   },
   "devDependencies": {
-    "eslint": "^6.0.0"
+    "eslint": "^6.0.1"
   },
   "repository": {
     "type": "git",
